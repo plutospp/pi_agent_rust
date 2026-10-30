@@ -2294,7 +2294,7 @@ async fn run(
     // flag that did nothing and three e2e suites passed it believing it chose
     // the stack. Reading it keeps that honest if the conflict is ever relaxed.
     #[cfg(feature = "ftui")]
-    let ftui_requested = is_interactive && (cli.ftui || !cli.classic);
+    let ftui_requested = is_interactive && (cli.ftui || (cli.inline && !cli.classic));
     #[cfg(not(feature = "ftui"))]
     let ftui_requested = false;
 

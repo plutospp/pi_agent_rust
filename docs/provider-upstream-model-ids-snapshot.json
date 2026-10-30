@@ -10,7 +10,11 @@
     "glm-4.7-flash",
     "glm-5",
     "glm-5.1",
-    "glm-5.2"
+    "glm-5-turbo",
+    "glm-5.2",
+    "glm-5.3",
+    "glm-5.3-flash",
+    "glm-5.3-flashx"
   ],
   "zenmux": [
     "anthropic/claude-3.5-haiku",
@@ -1396,7 +1400,11 @@
     "glm-4.7",
     "glm-5",
     "glm-5.1",
-    "glm-5.2"
+    "glm-5-turbo",
+    "glm-5.2",
+    "glm-5.3",
+    "glm-5.3-flash",
+    "glm-5.3-flashx"
   ],
   "deepseek": [
     "deepseek-chat",
@@ -2008,7 +2016,11 @@
     "glm-4.7-flash",
     "glm-5",
     "glm-5.1",
-    "glm-5.2"
+    "glm-5-turbo",
+    "glm-5.2",
+    "glm-5.3",
+    "glm-5.3-flash",
+    "glm-5.3-flashx"
   ],
   "venice": [
     "claude-opus-4-6",
@@ -2060,7 +2072,11 @@
     "glm-4.7-flashx",
     "glm-5",
     "glm-5.1",
-    "glm-5.2"
+    "glm-5-turbo",
+    "glm-5.2",
+    "glm-5.3",
+    "glm-5.3-flash",
+    "glm-5.3-flashx"
   ],
   "firmware": [
     "claude-haiku-4-5",

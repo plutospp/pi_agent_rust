@@ -1969,10 +1969,10 @@ fn wave_b3_family_and_coding_plan_variants_are_distinct() {
         canonical_provider_id("zai-coding-plan"),
         Some("zai-coding-plan")
     );
-    assert_eq!(provider_auth_env_keys("zai"), &["ZHIPU_API_KEY"]);
+    assert_eq!(provider_auth_env_keys("zai"), &["ZAI_API_KEY", "ZHIPU_API_KEY"]);
     assert_eq!(
         provider_auth_env_keys("zai-coding-plan"),
-        &["ZHIPU_API_KEY"]
+        &["ZAI_API_KEY", "ZHIPU_API_KEY"]
     );
     assert_eq!(zai.api, "openai-completions");
     assert_eq!(zai_coding.api, "openai-completions");
@@ -1986,10 +1986,10 @@ fn wave_b3_family_and_coding_plan_variants_are_distinct() {
         canonical_provider_id("zhipuai-coding-plan"),
         Some("zhipuai-coding-plan")
     );
-    assert_eq!(provider_auth_env_keys("zhipuai"), &["ZHIPU_API_KEY"]);
+    assert_eq!(provider_auth_env_keys("zhipuai"), &["ZAI_API_KEY", "ZHIPU_API_KEY"]);
     assert_eq!(
         provider_auth_env_keys("zhipuai-coding-plan"),
-        &["ZHIPU_API_KEY"]
+        &["ZAI_API_KEY", "ZHIPU_API_KEY"]
     );
     assert_eq!(zhipu.api, "openai-completions");
     assert_eq!(zhipu_coding.api, "openai-completions");

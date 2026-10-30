@@ -1007,14 +1007,25 @@ impl PiApp {
                 if self.thinking_visible
                     && let Some(thinking) = &msg.thinking
                 {
-                    let truncated = truncate(thinking, 100);
+                    let content_width = self.term_width.saturating_sub(4).max(1);
+                    let mut first_thinking_line = true;
+                    for raw_line in thinking.lines() {
+                        let thinking_line = if std::mem::take(&mut first_thinking_line) {
+                            format!("Thinking: {raw_line}")
+                        } else {
+                            raw_line.to_string()
+                        };
+                        for segment in wrapped_line_segments(&thinking_line, content_width) {
                     let _ = writeln!(
                         output,
                         "  {}",
                         self.styles
                             .muted_italic
-                            .render(&format!("Thinking: {truncated}"))
+                            .render(segment)
                     );
+                }
+
+                    }
                 }
 
                 // Render markdown content with rich enhancements
@@ -1160,10 +1171,16 @@ impl PiApp {
 
         // Show thinking if present
         if self.thinking_visible && !self.current_thinking.is_empty() {
-            let truncated = truncate(&self.current_thinking, 100);
-            let thinking_line = format!("Thinking: {truncated}");
-            for segment in wrapped_line_segments(&thinking_line, content_width) {
-                let _ = writeln!(output, "  {}", self.styles.muted_italic.render(segment));
+            let mut first_thinking_line = true;
+            for raw_line in self.current_thinking.lines() {
+                let thinking_line = if std::mem::take(&mut first_thinking_line) {
+                    format!("Thinking: {raw_line}")
+                } else {
+                    raw_line.to_string()
+                };
+                for segment in wrapped_line_segments(&thinking_line, content_width) {
+                    let _ = writeln!(output, "  {}", self.styles.muted_italic.render(segment));
+                }
             }
         }
 

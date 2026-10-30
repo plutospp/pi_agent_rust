@@ -104,6 +104,7 @@ fn known_long_option(name: &str) -> Option<LongOptionSpec> {
         // non-ftui builds clap still rejects them with a proper error instead
         // of the pre-parser silently diverting them to extension flags.
         | "ftui"
+        | "franken"
         | "classic"
         | "classic-tui"
         | "charmed"
@@ -483,17 +484,17 @@ pub struct Cli {
     #[arg(long)]
     pub no_session: bool,
 
-    /// Launch the FrankenTUI interactive stack (default when built with `ftui`).
+    /// Launch the FrankenTUI interactive stack (`--ftui` / `--franken`).
     ///
     /// Conflicts with `--classic`: the two select opposite stacks, and until
     /// this conflict was declared, nothing read this flag at all — `--ftui`
     /// appeared to work only because it names the default, and
     /// `pi --classic --ftui` silently gave you classic.
     #[cfg(feature = "ftui")]
-    #[arg(long, conflicts_with = "classic")]
+    #[arg(long, alias = "franken", conflicts_with = "classic")]
     pub ftui: bool,
 
-    /// Force the classic charmed_rust TUI stack instead of the default ftui stack.
+    /// Use the classic charmed_rust TUI stack (default).
     #[arg(long, aliases = ["classic-tui", "charmed", "bubbletea"])]
     pub classic: bool,
 
@@ -906,6 +907,10 @@ mod tests {
         );
         // The documented aliases for --classic conflict as well.
         assert!(Cli::try_parse_from(["pi", "--ftui", "--classic-tui"]).is_err());
+        let cli = Cli::parse_from(["pi", "--franken"]);
+        assert!(cli.ftui);
+        assert!(!cli.classic);
+        assert!(Cli::try_parse_from(["pi", "--franken", "--classic"]).is_err());
     }
 
     #[test]

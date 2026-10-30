@@ -1279,7 +1279,7 @@ pub const PROVIDER_METADATA: &[ProviderMetadata] = &[
         canonical_id: "zai",
         display_name: Some("Zai"),
         aliases: &[],
-        auth_env_keys: &["ZHIPU_API_KEY"],
+        auth_env_keys: &["ZAI_API_KEY", "ZHIPU_API_KEY"],
         onboarding: ProviderOnboardingMode::OpenAICompatiblePreset,
         routing_defaults: Some(ProviderRoutingDefaults {
             api: "openai-completions",
@@ -1296,7 +1296,7 @@ pub const PROVIDER_METADATA: &[ProviderMetadata] = &[
         canonical_id: "zai-coding-plan",
         display_name: Some("Zai Coding Plan"),
         aliases: &[],
-        auth_env_keys: &["ZHIPU_API_KEY"],
+        auth_env_keys: &["ZAI_API_KEY", "ZHIPU_API_KEY"],
         onboarding: ProviderOnboardingMode::OpenAICompatiblePreset,
         routing_defaults: Some(ProviderRoutingDefaults {
             api: "openai-completions",
@@ -1313,7 +1313,7 @@ pub const PROVIDER_METADATA: &[ProviderMetadata] = &[
         canonical_id: "zhipuai",
         display_name: Some("Zhipu AI"),
         aliases: &["zhipu", "glm"],
-        auth_env_keys: &["ZHIPU_API_KEY"],
+        auth_env_keys: &["ZAI_API_KEY", "ZHIPU_API_KEY"],
         onboarding: ProviderOnboardingMode::OpenAICompatiblePreset,
         routing_defaults: Some(ProviderRoutingDefaults {
             api: "openai-completions",
@@ -1330,7 +1330,7 @@ pub const PROVIDER_METADATA: &[ProviderMetadata] = &[
         canonical_id: "zhipuai-coding-plan",
         display_name: Some("Zhipu AI Coding Plan"),
         aliases: &[],
-        auth_env_keys: &["ZHIPU_API_KEY"],
+        auth_env_keys: &["ZAI_API_KEY", "ZHIPU_API_KEY"],
         onboarding: ProviderOnboardingMode::OpenAICompatiblePreset,
         routing_defaults: Some(ProviderRoutingDefaults {
             api: "openai-completions",
@@ -2893,21 +2893,21 @@ mod tests {
         );
         assert_eq!(
             provider_metadata("zai").unwrap().auth_env_keys,
-            &["ZHIPU_API_KEY"]
+            &["ZAI_API_KEY", "ZHIPU_API_KEY"]
         );
         assert_eq!(
             provider_metadata("zai-coding-plan").unwrap().auth_env_keys,
-            &["ZHIPU_API_KEY"]
+            &["ZAI_API_KEY", "ZHIPU_API_KEY"]
         );
         assert_eq!(
             provider_metadata("zhipuai").unwrap().auth_env_keys,
-            &["ZHIPU_API_KEY"]
+            &["ZAI_API_KEY", "ZHIPU_API_KEY"]
         );
         assert_eq!(
             provider_metadata("zhipuai-coding-plan")
                 .unwrap()
                 .auth_env_keys,
-            &["ZHIPU_API_KEY"]
+            &["ZAI_API_KEY", "ZHIPU_API_KEY"]
         );
     }
 
@@ -2947,8 +2947,8 @@ mod tests {
         assert_eq!(zhipu_coding.api, "openai-completions");
         assert_ne!(zhipu.base_url, zhipu_coding.base_url);
 
-        assert_eq!(provider_auth_env_keys("zai"), &["ZHIPU_API_KEY"]);
-        assert_eq!(provider_auth_env_keys("zhipuai"), &["ZHIPU_API_KEY"]);
+        assert_eq!(provider_auth_env_keys("zai"), &["ZAI_API_KEY", "ZHIPU_API_KEY"]);
+        assert_eq!(provider_auth_env_keys("zhipuai"), &["ZAI_API_KEY", "ZHIPU_API_KEY"]);
     }
 
     #[test]

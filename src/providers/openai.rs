@@ -370,6 +370,9 @@ impl OpenAIProvider {
             if format.eq_ignore_ascii_case("deepseek") {
                 return Some(ReasoningStyle::DeepSeek);
             }
+            if format.eq_ignore_ascii_case("zai") {
+                return Some(ReasoningStyle::Zai);
+            }
             if format.eq_ignore_ascii_case("openrouter") {
                 return Some(ReasoningStyle::OpenRouter);
             }
@@ -384,6 +387,18 @@ impl OpenAIProvider {
         let base_is_deepseek = self.base_url.to_ascii_lowercase().contains("deepseek.com");
         if provider_is_deepseek || base_is_deepseek {
             Some(ReasoningStyle::DeepSeek)
+        } else if canonical_provider_id(&self.provider).is_some_and(|canonical| {
+            matches!(
+                canonical,
+                "zai" | "zai-coding-plan" | "zhipuai" | "zhipuai-coding-plan"
+            )
+        }) || matches!(
+            self.provider.to_ascii_lowercase().as_str(),
+            "zai" | "zai-coding-plan" | "zhipuai" | "zhipuai-coding-plan"
+        ) || self.base_url.to_ascii_lowercase().contains("api.z.ai")
+            || self.base_url.to_ascii_lowercase().contains("open.bigmodel.cn")
+        {
+            Some(ReasoningStyle::Zai)
         } else if self.supports_plain_reasoning_effort() {
             Some(ReasoningStyle::OpenAI)
         } else {
@@ -625,6 +640,14 @@ impl OpenAIProvider {
                         | ThinkingLevel::Medium => None,
                     });
                     (Some(OpenAIThinking { kind: "enabled" }), effort, None)
+                }
+            }
+            Some(ReasoningStyle::Zai) => {
+                if level == ThinkingLevel::Off {
+                    (Some(OpenAIThinking { kind: "disabled" }), None, None)
+                } else {
+                    let mapped = mapped_effort.and_then(Option::as_deref);
+                    (Some(OpenAIThinking { kind: "enabled" }), mapped, None)
                 }
             }
             Some(ReasoningStyle::OpenRouter) => (None, None, self.openrouter_reasoning(level)),
@@ -2174,6 +2197,8 @@ enum ReasoningStyle {
     /// object (`compat.thinkingFormat: "openrouter"`, the default on the
     /// OpenRouter transport; gh #220).
     OpenRouter,
+    /// Z.AI / Zhipu GLM: `thinking: {type: enabled|disabled}`.
+    Zai,
 }
 
 #[derive(Debug, Serialize)]

@@ -129,6 +129,7 @@ impl ModelEntry {
         ) || self.is_deepseek_reasoning_model()
             || self.is_openrouter_reasoning_model()
             || self.is_anthropic_xhigh_effort_model()
+            || self.is_zai_reasoning_model()
     }
 
     /// Whether this model's thinking level is forwarded as OpenRouter's
@@ -234,6 +235,7 @@ impl ModelEntry {
         ) || self.is_deepseek_reasoning_model()
             || self.is_openrouter_reasoning_model()
             || self.is_anthropic_max_effort_model()
+            || self.is_zai_reasoning_model()
     }
 
     /// Whether this is an Anthropic adaptive-thinking model whose
@@ -305,6 +307,33 @@ impl ModelEntry {
             .to_ascii_lowercase()
             .contains("deepseek.com");
         provider_is_deepseek || base_is_deepseek
+    }
+
+    fn is_zai_reasoning_model(&self) -> bool {
+        if !self.model.reasoning {
+            return false;
+        }
+        if let Some(format) = self
+            .compat
+            .as_ref()
+            .and_then(|compat| compat.thinking_format.as_deref())
+            .map(str::trim)
+            .filter(|format| !format.is_empty())
+        {
+            return format.eq_ignore_ascii_case("zai");
+        }
+        let provider_is_zai = canonical_provider_id(&self.model.provider).is_some_and(|canonical| {
+            matches!(
+                canonical,
+                "zai" | "zai-coding-plan" | "zhipuai" | "zhipuai-coding-plan"
+            )
+        }) || matches!(
+            self.model.provider.to_ascii_lowercase().as_str(),
+            "zai" | "zai-coding-plan" | "zhipuai" | "zhipuai-coding-plan"
+        );
+        let base_lower = self.model.base_url.to_ascii_lowercase();
+        let base_is_zai = base_lower.contains("api.z.ai") || base_lower.contains("open.bigmodel.cn");
+        provider_is_zai || base_is_zai
     }
 
     /// Return the thinking levels that should be exposed for this model.
